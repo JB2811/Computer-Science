@@ -1,0 +1,43 @@
+#include<stdio.h>
+struct process
+{ int pid,bt,at,wt,tt,ft,rt;}p[10];
+int main()
+{ int i,n,mark[10];
+  printf("\nEnter the no' of process: ");
+  scanf("%d",&n);
+  printf("\nEnter process details");
+  for(i=0;i<n;i++)
+  { printf("\nEnter arrival time: ");
+    scanf("%d",&p[i].at);
+    printf("\nEnter burst time: ");
+    scanf("%d",&p[i].bt);
+    p[i].rt=p[i].bt;
+    p[i].pid=i;
+    mark[i]=0;}
+  printf("\nProcesses Given:- \nPno\tATime\tBTime");
+  for(i=0;i<n;i++)
+  { printf("\n%d\t%d\t%d",p[i].pid,p[i].at,p[i].bt);}
+  int q=0,c=0,j;
+  float tt=0,ta=0;
+  while(q<n)
+  { int t=100;
+    for(i=0;i<n;i++)
+    { if(mark[i]!=1 && p[i].at<=c && p[i].rt<t)
+      { t=p[i].rt;
+        j=i;}}
+    printf("\n%d",j);
+    p[j].rt=p[j].rt-1;
+    if(p[j].rt==0)
+    { p[j].ft=c+1;
+      p[j].tt=p[j].ft-p[j].at;
+      p[j].wt=p[j].tt-p[j].bt;
+      tt+=p[j].wt;
+      ta+=p[j].tt;
+      q++;
+      mark[j]=1;}
+    c++;}
+   printf("\nProcesses Given:- \nPno\tATime\tBTime\tWtime\tFtime\tTtime");
+   for(i=0;i<n;i++)
+   { printf("\n%d\t%d\t%d\t%d\t%d\t%d",p[i].pid,p[i].at,p[i].bt,p[i].wt,p[i].ft,p[i].tt);}
+   printf("\nAverage Waiting time: %f\nAverage Ta time: %f",tt/n,ta/n);
+   return 0;}

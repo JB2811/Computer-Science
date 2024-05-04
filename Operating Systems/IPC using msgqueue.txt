@@ -1,0 +1,39 @@
+#include<stdio.h>
+#include<sys/msg.h>
+#include<stdlib.h>
+#include<unistd.h>
+struct mymsg
+{ long mtype;
+  char mtext[10];}msg1,msg2;
+int main()
+{ int l1,l2,msgid,id;
+  pid_t pid;
+  l1=10; l2=10;
+  msgid=msgget(123,IPC_CREAT|0666);
+  msg1.mtype=msg2.mtype=1;
+  pid=fork();
+  if(msgid<0||pid<0)
+  { printf("\nError");
+    exit(0);}
+  else
+  { if(pid>0)
+    { printf("\nEnter msg by parent: ");
+      scanf("%s",&msg1.mtext);
+      l1=strlen(msg1.mtext);
+      msgsnd(msgid,&msg1,l1,0);
+      sleep(5);
+      msgrcv(msgid,&msg2,l2,0,0);
+      printf("\nMsg received by parent: %s",msg2.mtext);}
+    else
+    { sleep(3);
+      msgrcv(msgid,&msg1,l1,0,0);
+      printf("\nMsg received by child: %s",msg1.mtext);
+      printf("\nEnter msg by child: ");
+      scanf("%s",&msg2.mtext);
+      l2=strlen(msg2.mtext);
+      msgsnd(msgid,&msg2,l2,0);}}
+  sleep(5);
+  id=msgctl(msgid,IPC_RMID,NULL);
+  if(id>=0)
+  { printf("\nMessage queue with id %d is deleted\n",msgid);}
+  return 0;}

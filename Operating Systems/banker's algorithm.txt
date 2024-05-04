@@ -1,0 +1,68 @@
+#include<stdio.h>
+int main()
+{ int k,c,q,i,j,np,nr,r[10],alloc[10][10],req[10][10],avail[10],m[10];
+  printf("\nEnter the no' of processes: ");
+  scanf("%d",&np);
+  printf("\nEnter the no' of resources: ");
+  scanf("%d",&nr);
+  for(i=0;i<nr;i++)
+  { printf("\nEnter Total amount of resource %d: ",i);
+    scanf("%d",&r[i]);}
+  printf("\nEnter allocation Matrix:-");
+  for(i=0;i<np;i++)
+  { for(j=0;j<nr;j++)
+    { printf("\nEnter resource %d allocated for process %d: ",j,i);
+      scanf("%d",&alloc[i][j]);
+      r[j]-=alloc[i][j];}
+    m[i]=0;}
+  printf("\nEnter request Matrix:");
+  for(i=0;i<np;i++)
+  { for(j=0;j<nr;j++)
+    { printf("\nEnter resource %d requested by process %d: ",j,i);
+      scanf("%d",&req[i][j]);}}
+  printf("\nResource Matrix:-");
+  for(i=0;i<nr;i++)
+  { printf("%d ",r[i]);}
+  printf("\nAllocated Matrix:-");
+  for(i=0;i<np;i++)
+  { printf("\n");
+    for(j=0;j<nr;j++)
+    { printf("%d ",alloc[i][j]);}}
+  printf("\nRequest Matrix:-");
+  for(i=0;i<np;i++)
+  { printf("\n");
+    for(j=0;j<nr;j++)
+    { printf("%d ",req[i][j]);}}
+  c=0; q=0;
+  while(c<np)
+  { for(i=0;i<np;i++)
+    { if(m[i]==0)
+      { k=0;
+        for(j=0;j<nr;j++)
+        { if(req[i][j]<=r[j])
+          { k++;}
+          else
+          { break;}}
+        if(k==nr)
+        { for(j=0;j<nr;j++)
+          { r[j]-=req[i][j];
+            alloc[i][j]+=req[i][j];
+            r[j]+=alloc[i][j];}
+          c++;
+          m[i]=c;}}}
+    if(q!=c)
+    { q=c;}
+    else
+    { break;}}
+  if(c<np)
+  { printf("\nDeadlock Encountered");}
+  else
+  { printf("\nNo deadlock encountered\nSafe Sequence: ");
+    c=1;
+    while(c<=np)
+    { for(i=0;i<np;i++)
+      { if(m[i]==c)
+       { printf("P%d->",i);
+         break;}}
+      c++;}}
+  return 0;}

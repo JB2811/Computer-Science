@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<pthread.h>
+#include<semaphore.h>
+pthread_t t;
+pthread_mutex_t mutex;
+sem_t empty,full;
+int buffer;
+pthread_attr_t a;
+void initializedata()
+{ pthread_mutex_init(&mutex,NULL);
+  sem_init(&full,0,0);
+  sem_init(&empty,0,1);
+  pthread_attr_init(&a);}
+int insertitem(int item)
+{ buffer=item;
+  return 0;}
+int removeitem(int *item)
+{ *item=buffer;
+  return 0;}
+void *producer()
+{ int item;
+  while(1)
+  { sleep(2);
+    printf("\nEnter an item to be entered into buffer: ");
+    scanf("%d",&item);
+    sem_wait(&empty);
+    pthread_mutex_lock(&mutex);
+    if(insertitem(item))
+    { printf("\nProducer finds an error");}
+    else
+    { printf("\nData has been entered successfully: %d",item);}
+    pthread_mutex_unlock(&mutex);
+    sem_post(&full);}}
+void *consumer()
+{ int item;
+  while(1)
+  { sleep(2);
+    sem_wait(&full);
+    pthread_mutex_lock(&mutex);
+    if(removeitem(&item))
+    { printf("\nConsumer finds an error");}
+    else
+    { printf("\nConsumer read the date successfully: %d",item);}
+    pthread_mutex_unlock(&mutex);
+    sem_post(&empty);}}
+int main()
+{ int s;
+  printf("\nEnter the main thread sleep time: ");
+  scanf("%d",&s);
+  initializedata();
+  pthread_create(&t,&a,producer,NULL);
+  pthread_create(&t,&a,consumer,NULL);
+  sleep(s);
+  return 0;}

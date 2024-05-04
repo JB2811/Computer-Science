@@ -1,0 +1,41 @@
+#include<stdio.h>
+#include<pthread.h>
+const int MAX=1e9;
+int flag[2],turn,count=0,mode=0;
+void lockinit()
+{ flag[0]=0;
+  flag[1]=0;
+  turn=0;
+  mode=1;}
+void lock(int current)
+{ flag[current]=1;
+  turn=1-current;
+  while(flag[1-current]==1 && turn==1-current);}
+void unlock(int current)
+{ flag[current]=0;}
+void process(void* a)
+{ int current=(int*)a;
+  printf("\nProcess: %d",current);
+  if(mode==1)
+  { lock(current);}
+  for(int i=0;i<MAX;i++)
+  { count++;}
+  if(mode==1)
+  { unlock(current);}}
+int main()
+{ printf("\nPeterson's Algorithm\n\nWithout lock");
+  pthread_t p1,p2,p3,p4;
+  pthread_create(&p1,NULL,process,(void*)0);
+  pthread_create(&p2,NULL,process,(void*)1);
+  pthread_join(p1,NULL);
+  pthread_join(p2,NULL);
+  printf("\nActual count: %d,Expected count: %d",count,MAX*2);
+  printf("\nwith locks");
+  lockinit();
+  count=0;
+  pthread_create(&p3,NULL,process,(void*)0);
+  pthread_create(&p4,NULL,process,(void*)1);
+  pthread_join(p3,NULL);
+  pthread_join(p4,NULL);
+  printf("\nActual count: %d, Expected Count: %d",count,MAX*2);
+  return 0;}

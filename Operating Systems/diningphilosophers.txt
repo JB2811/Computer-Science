@@ -1,0 +1,56 @@
+#include<stdio.h>
+#include<unistd.h>
+#include<semaphore.h>
+int i;
+#define n 5
+#define LEFT (i-1)%n
+#define RIGHT (i+1)%n
+#define THINKING 0
+#define HUNGRY 1
+#define EATING 2
+sem_t mutex;
+int state[n];
+void takefork(int i)
+{ sem_wait(&mutex);
+  state[i]=HUNGRY;
+  if(state[i]==HUNGRY && state[LEFT]!=EATING && state[RIGHT]!=EATING)
+  { state[i]=EATING;}
+  sem_post(&mutex);}
+void putfork(int i)
+{ sem_wait(&mutex);
+  state[i]=THINKING;
+  printf("\nPhilosopher %d has finished eating",i);
+  sem_post(&mutex);}
+void think(int i)
+{ printf("\nPhilospher %d is thinking",i);
+  state[i]=THINKING;}
+void eat(int i)
+{ printf("\nPhilospher %d is eating",i);}
+void philo(int i)
+{ think(i);
+  takefork(i);
+  eat(i);
+  putfork(i);}
+int main()
+{ pid_t p1,p2,p3,p4,p5;
+  sem_init(&mutex,0,1);
+  p1=fork();
+  if(p1==0)
+  { philo(1);}
+  else
+  { p2=fork();
+    if(p2==0)
+    { philo(2);}
+    else
+    { p3=fork();
+      if(p3==0)
+      { philo(3);}
+      else
+      { p4=fork();
+        if(p4==0)
+        { philo(4);}
+        else
+        { p5=fork();
+          if(p5==0)
+          { philo(5);}}}}}
+  return 0;}

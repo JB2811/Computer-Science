@@ -1,0 +1,84 @@
+#include<stdio.h>
+struct process
+{ int pid,wtime,btime,ttime,rt;}p[10];
+int main()
+{ int n,i,j,l,k,t,tt;
+  int ps[10];
+  float twat,ttut,awat,atut;
+  printf("\nEnter no' of processes: ");
+  scanf("%d",&n);
+  for(i=1;i<=n;i++)
+  { p[i].pid=i;
+    printf("\nEnter the burst time for process %d: ",i);
+    scanf("%d",&p[i].btime);
+    p[i].rt=p[i].btime;}
+  printf("\nEnter time slice: ");
+  scanf("%d",&t);
+  int rw=0; j=0;
+  while(j<n)
+  { for(i=1;i<=n;i++)
+    { if(ps[i]!=1)
+      { if(p[i].rt>t)
+        { p[i].rt-=t;
+          rw=rw+t;}
+        else
+        { rw=rw+p[i].rt;
+	  p[i].ttime=rw;
+          p[i].rt=p[i].btime;
+          p[i].wtime=p[i].ttime-p[i].btime;
+          ps[i]=1;
+          j++;}}}}
+  printf("\n\nRR Scheduling\n\nProcess\tBtime\tWtime\tTime\n");
+  for(j=1;j<=n;j++)
+  { printf("\n%d\t\t%d\t\t%d\t\t%d",p[j].pid,p[j].btime,p[j].wtime,p[j].ttime);}
+  printf("\nGNATT CHART-\n");
+  for(i=0;i<=50;i++)
+  { printf("-");}
+  printf("\n|");
+  rw=0; j=0;
+  while(j<n)
+  { for(i=1;i<=n;i++)
+    { if(ps[i]!=2)
+      { if(p[i].rt>t)
+        { for(l=0;l<t/2;l++)
+          { printf(" ");}
+          printf("P%d",p[i].pid);
+          for(l=t/2;l<t;l++)
+          { printf(" ");}
+          p[i].rt-=t;
+          rw=rw+t;
+          printf("|");}
+        else
+        { rw=rw+p[i].rt;
+	  for(l=0;l<p[i].rt/2;l++)
+	  { printf(" ");}
+          printf("P%d",p[i].pid);
+          for(l=p[i].rt/2;l<p[i].rt;l++)
+          { printf(" ");}
+            p[i].rt=p[i].btime;
+            ps[i]++;
+            j++;
+            printf("|");}}}}
+  printf("\n");
+  for(i=0;i<=50;i++)
+  { printf("-");}
+  printf("\n0");
+  rw=0; j=0;
+  while(j<n)
+  { for(i=1;i<=n;i++)
+    { if(ps[i]!=3)
+      { if(p[i].rt>t)
+        { for(l=0;l<t;l++)
+          { printf(" ");}
+ 	  rw=rw+t;
+          printf(" %d",rw);
+          p[i].rt-=t;}
+        else
+        { rw=rw+p[i].rt;
+	  for(l=0;l<p[i].rt;l++)
+          { printf(" ");}
+          printf(" %d",rw);
+          p[i].rt=0;
+          ps[i]++;
+          j++;}}}}
+  return 0;}

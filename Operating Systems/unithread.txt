@@ -1,0 +1,10 @@
+#include<stdio.h>
+#include<unistd.h>
+#include<pthread.h>
+void *mythreadfun()
+{ printf("sastra");}
+int main()
+{ pthread_t tid;
+  pthread_create(&tid,NULL,mythreadfun,NULL);
+  pthread_join(tid,NULL);
+  return 0;}

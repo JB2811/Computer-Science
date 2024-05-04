@@ -1,0 +1,13 @@
+#include<stdio.h>
+#include<unistd.h>
+#include<pthread.h>
+int g;
+void *mythreadfun(void *a)
+{ int *t=(int*)a;
+  static int s=0;
+  printf("\nThread Id: %d, Global: %d, Static: %d",*t,++g,++s);}
+int main()
+{ pthread_t t;
+  for(int i=0;i<3;i++)
+  { pthread_create(&t,NULL,mythreadfun,(void*)&t);
+    pthread_join(t,NULL);}}

@@ -1,0 +1,60 @@
+#include<stdio.h>
+struct process
+{ int pid,wtime,btime,ttime;}p[10];
+int main()
+{ int n,i,j,l,k,t;
+  int ps[10];
+  float twat,ttut,awat,atut;
+  printf("\nEnter no' of processes: ");
+  scanf("%d",&n);
+  for(i=1;i<=n;i++)
+  { p[i].pid=i;
+    printf("\nEnter the burst time for process %d: ",i);
+    scanf("%d",&p[i].btime);}
+  int sw=0;
+  for(j=1;j<=n;j++)
+  { l=1000;
+    for(i=1;i<=n;i++)
+    { if(l>p[i].btime && ps[i]!=1)
+      { k=i;
+        l=p[i].btime;}}
+      ps[k]=1;
+      p[k].wtime=sw;
+      sw=sw+p[k].btime;}
+  for(i=1;i<=n;i++)
+  { p[i].ttime=p[i].wtime+p[i].btime;}
+  printf("\n\nSJF Scheduling\n\nProcess\tBtime\tWtime\tTime\n");
+  for(j=1;j<=n;j++)
+  { printf("\n%d\t\t%d\t\t%d\t\t%d",p[j].pid,p[j].btime,p[j].wtime,p[j].ttime);}
+  printf("\nGNATT CHART-\n");
+  for(i=0;i<=50;i++)
+  { printf("-");}
+  printf("\n|");
+  for(j=1;j<=n;j++)
+  { l=1000;
+    for(i=1;i<=n;i++)
+    { if(l>p[i].btime && ps[i]!=2)
+      { k=i;
+        l=p[i].btime;}}
+    ps[k]++;
+    for(l=0;l<p[k].btime/2;l++)
+    { printf(" ");}
+    printf("%d",p[k].pid);
+    for(l=p[k].btime/2;l<p[k].btime;l++)
+    { printf(" ");}
+    printf("|");}
+  printf("\n");
+  for(i=0;i<=50;i++)
+  { printf("-");}
+  printf("\n0");
+  for(j=1;j<=n;j++)
+  { l=1000;
+    for(i=1;i<=n;i++)
+    { if(l>p[i].btime && ps[i]!=3)
+      { k=i;
+        l=p[i].btime;}}
+    ps[k]++;
+    for(l=0;l<p[k].btime;l++)
+    { printf(" ");}
+    printf("%d",p[k].ttime);}
+  return 0;}
