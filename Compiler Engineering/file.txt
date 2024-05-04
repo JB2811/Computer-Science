@@ -1,0 +1,8 @@
+a=x+y
+b=y+x
+c=y-x
+d=z*y
+e=y*z
+f=y*z
+d=y+x
+g=z*y

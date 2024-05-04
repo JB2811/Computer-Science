@@ -1,0 +1,11 @@
+E=TR
+R=+TR
+R=-TR
+R=\
+T=FX
+X=*FX
+X=/FX
+X=\
+F=(E)
+F=n
+F=i
